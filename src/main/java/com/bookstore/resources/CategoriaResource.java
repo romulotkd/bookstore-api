@@ -62,15 +62,4 @@ public class CategoriaResource {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

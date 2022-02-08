@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -44,6 +45,18 @@ public class LivroResource {
 		List<LivroDTO> listDTO = lista.stream().map(obj -> new LivroDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<LivroDTO> update(@PathVariable Integer id, @RequestBody Livro obj) {
+		Livro newObj = service.update(id, obj);
+		return ResponseEntity.ok().body(new LivroDTO(newObj));
+	}
+	
+	@PatchMapping(value = "/{id}")
+	public ResponseEntity<LivroDTO> updatePatch(@PathVariable Integer id, @RequestBody Livro obj) {
+		Livro newObj = service.update(id, obj);
+		return ResponseEntity.ok().body(new LivroDTO(newObj));
+	}
 
 	@PostMapping
 	public ResponseEntity<Livro> create(@RequestBody Livro obj) {
@@ -52,12 +65,6 @@ public class LivroResource {
 //		return ResponseEntity.created(uri).body(obj);
 		return ResponseEntity.created(uri).build(); // Sem passar o objeto criado, só o uri. Que fica em headers >
 													// location.
-	}
-
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<LivroDTO> update(@PathVariable Integer id, @RequestBody Livro obj) {
-		Livro newObj = service.update(id, obj);
-		return ResponseEntity.ok().body(new LivroDTO(newObj));
 	}
 
 	@DeleteMapping(value = "/{id}")

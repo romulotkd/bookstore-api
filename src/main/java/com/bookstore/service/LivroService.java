@@ -60,4 +60,11 @@ public class LivroService {
 		categoriaService.findById(id_cat);
 		return repository.findAllByCategoria(id_cat);
 	}
+
+	public Livro create(Integer id_cat, Livro obj) {
+		obj.setId(null);
+		Categoria categoria = categoriaService.findById(id_cat);
+		obj.setCategoria(categoria);
+		return repository.save(obj);
+	}
 }

@@ -45,13 +45,13 @@ public class LivroResource {
 		List<LivroDTO> listDTO = lista.stream().map(obj -> new LivroDTO(obj)).collect(Collectors.toList());
 		return ResponseEntity.ok().body(listDTO);
 	}
-	
+
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<LivroDTO> update(@PathVariable Integer id, @RequestBody Livro obj) {
 		Livro newObj = service.update(id, obj);
 		return ResponseEntity.ok().body(new LivroDTO(newObj));
 	}
-	
+
 	@PatchMapping(value = "/{id}")
 	public ResponseEntity<LivroDTO> updatePatch(@PathVariable Integer id, @RequestBody Livro obj) {
 		Livro newObj = service.update(id, obj);
@@ -59,9 +59,10 @@ public class LivroResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<Livro> create(@RequestBody Livro obj) {
-		obj = service.create(obj);
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
+	public ResponseEntity<Livro> create(@RequestParam(value = "categoria", defaultValue = "0") Integer id_cat,
+			@RequestBody Livro obj) {
+		obj = service.create(id_cat, obj);
+		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/livros/{id}").buildAndExpand(obj.getId()).toUri();
 //		return ResponseEntity.created(uri).body(obj);
 		return ResponseEntity.created(uri).build(); // Sem passar o objeto criado, só o uri. Que fica em headers >
 													// location.

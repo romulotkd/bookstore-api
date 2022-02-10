@@ -50,7 +50,8 @@ public class LivroService {
 
 	public void delete(Integer id) {
 		try {
-			repository.deleteById(id);
+			Livro livro = findById(id);
+			repository.delete(livro);
 		} catch (DataIntegrityViolationException e) {
 			throw new com.bookstore.service.exception.DataIntegrityViolationException("Livro não pode ser deletado!");
 		}

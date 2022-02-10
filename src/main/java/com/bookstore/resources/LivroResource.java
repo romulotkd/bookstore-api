@@ -4,8 +4,11 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -22,6 +25,7 @@ import com.bookstore.domain.Livro;
 import com.bookstore.resources.dtos.LivroDTO;
 import com.bookstore.service.LivroService;
 
+@CrossOrigin("*") // Para receber chamadas de várias fontes diferentes.
 @RestController
 @RequestMapping(value = "/livros")
 public class LivroResource {
@@ -53,14 +57,14 @@ public class LivroResource {
 	}
 
 	@PatchMapping(value = "/{id}")
-	public ResponseEntity<LivroDTO> updatePatch(@PathVariable Integer id, @RequestBody Livro obj) {
+	public ResponseEntity<LivroDTO> updatePatch(@PathVariable Integer id, @Valid @RequestBody Livro obj) {
 		Livro newObj = service.update(id, obj);
 		return ResponseEntity.ok().body(new LivroDTO(newObj));
 	}
 
 	@PostMapping
 	public ResponseEntity<Livro> create(@RequestParam(value = "categoria", defaultValue = "0") Integer id_cat,
-			@RequestBody Livro obj) {
+			@Valid @RequestBody Livro obj) {
 		obj = service.create(id_cat, obj);
 		URI uri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/livros/{id}").buildAndExpand(obj.getId()).toUri();
 //		return ResponseEntity.created(uri).body(obj);
